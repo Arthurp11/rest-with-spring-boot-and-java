@@ -11,3 +11,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+    open-in-view: false
+logging:
+  level:
+    root: WARN
+    # Arthurp11.com.github: DEBUG

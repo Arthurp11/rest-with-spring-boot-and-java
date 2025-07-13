@@ -1,14 +1,18 @@
 package Arthurp11.com.github.services;
 
+import Arthurp11.com.github.data.dto.UserDTO;
 import Arthurp11.com.github.exception.ResourceNotFoundException;
+import static Arthurp11.com.github.mapper.ObjectMapper.parseListObjects;
+import static Arthurp11.com.github.mapper.ObjectMapper.parseObject;
 import Arthurp11.com.github.repositories.UserRepository;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
 
 @Service
 public class UserService {
@@ -18,28 +22,31 @@ public class UserService {
     @Autowired
     UserRepository repository;
 
-    private Logger logger = Logger.getLogger(UserService.class.getName());
+    private Logger logger = LoggerFactory.getLogger(UserService.class.getName());
 
-    public List<User> findAll() {
+    public List<UserDTO> findAll() {
         logger.info("Finding all users!");
 
-        return repository.findAll();
+        return parseListObjects(repository.findAll(), UserDTO.class);
     }
 
-    public User findById(Long id) {
+    public UserDTO findById(Long id) {
         logger.info("Finding one user!");
 
-        return repository.findById(id)
+        var entity = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+
+        return parseObject(entity, UserDTO.class);
     }
 
-    public User create(User user) {
+    public UserDTO create(UserDTO user) {
         logger.info("Creating one user");
+        var entity = parseObject(user, User.class);
 
-        return repository.save(user);
+        return parseObject(repository.save(entity),UserDTO.class);
     }
 
-    public User update(User user) {
+    public UserDTO update(UserDTO user) {
         logger.info("Updating one user");
 
         User entity = repository.findById(user.getId())
@@ -50,7 +57,7 @@ public class UserService {
         entity.setPhone(user.getPhone());
         entity.setEmail(user.getEmail());
 
-        return repository.save(entity);
+        return parseObject(repository.save(entity),UserDTO.class);
     }
 
     public void delete(Long id) {

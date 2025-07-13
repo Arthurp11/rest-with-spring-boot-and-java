@@ -1,7 +1,7 @@
 package Arthurp11.com.github.controllers;
 
+import Arthurp11.com.github.data.dto.UserDTO;
 import Arthurp11.com.github.services.UserService;
-import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +19,14 @@ public class UserController {
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public User findById(@PathVariable("id") Long id) {
+    public UserDTO findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
 
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<User> findAll() {
+    public List<UserDTO> findAll() {
         return service.findAll();
     }
 
@@ -34,7 +34,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public User create (User user) {
+    public UserDTO create (UserDTO user) {
         return service.create(user);
     }
 
@@ -42,7 +42,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public User update (User user) {
+    public UserDTO update (UserDTO user) {
         return service.create(user);
     }
 
